@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+
+  postgres:
+    image: postgres:13.3-buster
+    container_name: computeinsight-pc01
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=computeinsight
+      - POSTGRES_DB=computeinsight
+
+    ports:
+      - 5432:5432
+    volumes:
+      - computeinsight_postgres_data:/var/lib/postgresql/data/
+
+
+networks:
+  computeinsight:
+    driver: bridge
+
+volumes:
+  computeinsight_postgres_data:
+  computeinsight_media_volume:
