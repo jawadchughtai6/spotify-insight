@@ -1,4 +1,5 @@
 import sys
+import datetime
 
 sys.path.append("..")
 
@@ -15,13 +16,22 @@ db = PostgresqlDatabase('computeinsight', user='postgres', password='computeinsi
 
 def user_recommendations(request):
     username = request.path_params['username']
+    date = request.query_params['date'] if 'date' in request.query_params else None
+
+    if date:
+        date = datetime.datetime.strptime(date, '%Y-%m-%d')
+    else:
+        date = datetime.datetime.now().date()
 
     with db:
-        recommendations = Recommendation.select(Recommendation.track_title,
+        recommendations = Recommendation.select(Recommendation.id,
+                                                Recommendation.track_title,
                                                 Recommendation.track_id,
-                                                Recommendation.track_link, ) \
+                                                Recommendation.track_link,
+                                                Recommendation.user) \
             .join(User) \
-            .where(User.username == username)
+            .where((User.username == username) &
+                   (fn.date_trunc('day', Recommendation.created_at) == date))
 
     return JSONResponse([model_to_dict(item) for item in recommendations])
 
