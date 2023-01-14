@@ -11,7 +11,7 @@ from playhouse.shortcuts import model_to_dict
 
 from db.models import User, Recommendation
 
-db = PostgresqlDatabase('computeinsight', user='postgres', password='computeinsight', host='localhost', port=5432)
+db = PostgresqlDatabase('computeinsight', user='postgres', password='postgres', host='db', port=5432)
 
 
 def user_recommendations(request):
@@ -42,6 +42,10 @@ async def websocket_endpoint(websocket):
     await websocket.close()
 
 
+async def homepage(request):
+    return JSONResponse({'hello': 'world'})
+
+
 def startup():
     pass
 
@@ -49,6 +53,7 @@ def startup():
 routes = [
     Route('/user-recommendations/{username}', user_recommendations),
     WebSocketRoute('/ws', websocket_endpoint),
+    Route('/', homepage),
 ]
 
 app = Starlette(debug=True, routes=routes, on_startup=[startup])
