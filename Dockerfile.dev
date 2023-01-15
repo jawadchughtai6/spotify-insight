@@ -1,17 +1,21 @@
-FROM tiangolo/uvicorn-gunicorn-starlette:python3.10
+FROM python:3.10
 
-ENV VAR1=10
+RUN apt-get update && apt-get -y install cron vim
 
-# Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED=1
-
-# Install & use pipenv
-COPY Pipfile Pipfile.lock ./
-RUN python -m pip install --upgrade pip
-RUN pip install pipenv && pipenv install --dev --system --deploy
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
 
 WORKDIR /code
 COPY . /code
+
+# Install & use pipenv
+RUN python -m pip install --upgrade pip
+RUN pip install pipenv && pipenv install --dev --system --deploy
+
+RUN touch /var/log/cron.log
+
+RUN chmod 0644 /code/spotify.cronjob
+RUN chmod +x /code/cron.sh
+RUN /usr/bin/crontab /code/spotify.cronjob
+CMD ["cron", "-f"]
+CMD (cron -f &) && tail -f /var/log/cron.log

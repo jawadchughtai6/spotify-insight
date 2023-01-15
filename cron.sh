@@ -1,3 +1,5 @@
 #!/bin/bash
-cd compute-insight
-python3 spotify_client.py
+cd /code
+PATH=/usr/local/bin:$PATH
+/usr/local/bin/pipenv install
+/usr/local/bin/pipenv run python -m spotify_client

@@ -4,7 +4,7 @@ from peewee import *
 db = PostgresqlDatabase('computeinsight',
                         user='postgres',
                         password='postgres',
-                        host='localhost',
+                        host='db',
                         port=5432)
 
 
