@@ -2,14 +2,9 @@ import datetime
 from peewee import *
 
 from application import Application
+from utils import db
 
-app = Application('Compute Insight')
-
-db = PostgresqlDatabase(app.env('DB'),
-                        user=app.env('DB_USER'),
-                        password=app.env('DB_PASSWORD'),
-                        host=app.env('DB_HOST'),
-                        port=app.env('DB_PORT'))
+app = Application("Compute Insight")
 
 
 class BaseModel(Model):
@@ -27,7 +22,7 @@ class User(BaseModel):
 
 
 class Recommendation(BaseModel):
-    user = ForeignKeyField(User, backref='recommendations')
+    user = ForeignKeyField(User, backref="recommendations")
     track_id = CharField()
     track_title = CharField()
     track_link = CharField()
