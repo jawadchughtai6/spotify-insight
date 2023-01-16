@@ -1,31 +1,48 @@
 # Spotify Insight
 
+## Tech Stack
+- [Starlette](https://www.starlette.io/)
+- [Peewee](https://docs.peewee-orm.com/en/latest/)
+- [Uvicorn](https://www.uvicorn.org/) 
+- PostgreSQL
+- Docker
+
 ## Setting up local environment
 
 ### Pre-requisites
 - Docker
-- Pipenv
-
-### Install dependencies
-- `pipenv install`
-
-### Run PostgreSQL on Docker and set up a database
-- `docker run -d -p 5432:5432 --name computeinsight -e POSTGRES_PASSWORD=computeinsight postgres`
-
-#### In a new terminal:
-- `docker exec -it computeinsight bash`
-- `psql -U postgres`
-- `CREATE DATABASE computeinsight`
+- docker-compose
+- You have created a Spotify app following the [app settings guide](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/).
 
 ### Update .env.development
+Using the credentials obtained from the Spotify app, update the following in .env.development
 - `Update CLIENT_ID`
 - `Update CLIENT_SECRET`
 - `Update USERNAME`
+  
+The username can be any alias name against the above credentials. Add them as per wish.
 
-### Running Spotify Client
-`python3 spotify_client.py`
+### Runing the containers
+- `docker-compose -f docker-compose.dev.yml up --build`
 
-### Running Starlette
-#### In a new terminal
-- `cd web`
-- `uvicorn web:app`
+### Initial database dump
+#### In a new terminal:
+- `docker-compose -f docker-compose.dev.yml exec app bash`
+- `python3 spotify_client.py`
+
+You should now have your database populated.
+
+### Web API
+The following API returns recommendations for the given user on a given date:
+
+`http://0.0.0.0:8000/user-recommendations/{username}?date={yyyy-mm-dd}`
+
+## Approach
+Recommendations of the given user are fetched after using 
+[client credentials flow](https://developer.spotify.com/documentation/general/guides/authorization/client-credentials/) for authentication.
+At the moment, we are fetching data only for the given user (.env.development) 
+but this can be expanded to retrieve recommendations for different users dynamically.
+
+There are three docker containers set up; One running PostgreSQL database, Second running a CRON Job scheduled for midnight, 
+retrieving recommendations against given user every night and 
+last running Starlette and Uvicorn for serving the Web API.

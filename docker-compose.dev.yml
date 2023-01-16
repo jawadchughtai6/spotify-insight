@@ -3,6 +3,7 @@ version: '3.4'
 services:
 
   web:
+    tty: true
     build:
       context: .
       dockerfile: web/Dockerfile.dev
@@ -21,6 +22,7 @@ services:
       - computeinsight
 
   app:
+    tty: true
     build:
       context: .
       dockerfile: ./Dockerfile.dev
@@ -30,6 +32,7 @@ services:
       - computeinsight
 
   db:
+    tty: true
     image: postgres:13.3-buster
     container_name: computeinsight-pc01
     environment:
