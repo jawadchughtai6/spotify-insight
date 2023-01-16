@@ -2,19 +2,50 @@ version: '3.4'
 
 services:
 
-  postgres:
+  web:
+    tty: true
+    build:
+      context: .
+      dockerfile: web/Dockerfile.dev
+    container_name: computeinsight-wc01
+    environment:
+      - MODULE_NAME=web.web
+      - PORT=8000
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/code
+    depends_on:
+      - db
+    networks:
+      - computeinsight
+
+  app:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    depends_on:
+      - db
+    networks:
+      - computeinsight
+
+  db:
+    tty: true
     image: postgres:13.3-buster
     container_name: computeinsight-pc01
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=computeinsight
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=computeinsight
-
+    restart: unless-stopped
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - computeinsight_postgres_data:/var/lib/postgresql/data/
-
+    networks:
+      - computeinsight
 
 networks:
   computeinsight:

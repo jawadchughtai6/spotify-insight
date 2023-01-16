@@ -5,13 +5,20 @@ sys.path.append("..")
 
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
-from starlette.routing import Route, WebSocketRoute
+from starlette.routing import Route
 from peewee import *
 from playhouse.shortcuts import model_to_dict
 
 from db.models import User, Recommendation
+from application import Application
 
-db = PostgresqlDatabase('computeinsight', user='postgres', password='computeinsight', host='localhost', port=5432)
+app = Application('Compute Insight')
+
+db = PostgresqlDatabase(app.env('DB'),
+                        user=app.env('DB_USER'),
+                        password=app.env('DB_PASSWORD'),
+                        host=app.env('DB_HOST'),
+                        port=app.env('DB_PORT'))
 
 
 def user_recommendations(request):
@@ -36,19 +43,8 @@ def user_recommendations(request):
     return JSONResponse([model_to_dict(item) for item in recommendations])
 
 
-async def websocket_endpoint(websocket):
-    await websocket.accept()
-    await websocket.send_text('Hello, websocket!')
-    await websocket.close()
-
-
-def startup():
-    pass
-
-
 routes = [
     Route('/user-recommendations/{username}', user_recommendations),
-    WebSocketRoute('/ws', websocket_endpoint),
 ]
 
-app = Starlette(debug=True, routes=routes, on_startup=[startup])
+app = Starlette(debug=True, routes=routes)
