@@ -2,7 +2,7 @@ import datetime
 from peewee import *
 
 from application import Application
-from utils import db
+from db.utils import db
 
 app = Application("Compute Insight")
 

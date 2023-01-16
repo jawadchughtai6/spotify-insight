@@ -2,6 +2,7 @@ from peewee import PostgresqlDatabase
 
 from application import Application
 
+app = Application("Compute Insight")
 
 db = PostgresqlDatabase(
     app.env("DB"),
