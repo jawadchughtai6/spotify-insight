@@ -38,7 +38,7 @@ class Application:
         param str name: Name of the environment
         param str default_Value: Set to None, it is used if name is not provided.
 
-        return str: Name of the environmet key
+        return str: Name of the environment key
         """
         return os.getenv(name, default_value)
 
