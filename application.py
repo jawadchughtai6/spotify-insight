@@ -36,7 +36,7 @@ class Application:
         Fetches environment variable key on the basis of provided name.
 
         param str name: Name of the environment
-        param str default_Value: Set to None, it is used if name is not provided.
+        param str default_value: Set to None, it is used if name is not provided.
 
         return str: Name of the environment key
         """
@@ -50,9 +50,9 @@ class Application:
 
     def configure_logging(self):
         """
-        Configures enabling disabling of logs on the basis of configuration.
+        Configures enabling/disabling of logs on the basis of configuration.
         """
-        logging.basicConfig(filename="migrations.log")
+        logging.basicConfig(filename="app.log")
         coloredlogs.install(
             level="DEBUG",
             milliseconds=True
