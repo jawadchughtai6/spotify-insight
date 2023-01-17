@@ -59,6 +59,11 @@ class Application:
         )
 
     def db_config(self):
+        """
+        Manages base peewee database connection for Postgres db.
+
+        return PostgresqlDatabase: Database object is provided.
+        """
         return PostgresqlDatabase(
             self.env("DB"),
             user=self.env("DB_USER"),
@@ -68,15 +73,32 @@ class Application:
         )
 
     def db_engine(self, db_alias):
+        """
+        Iterates through configured database engines and against the provided alias database conig is stored.
+
+        param str db_alias: Name of the database table.
+
+        return PostgresqlDatabase: Database object is provided.
+        """
         if db_alias not in self.db_engines:
             self.db_engines[db_alias] = self.db_config()
 
         return self.db_engines[db_alias]
 
     def db_session(self, db_alias):
+        """
+        Manages connection to the database against provided alias.
+
+        param str db_alias: Name of the database table.
+
+        return PostgresqlDatabase: Database object is provided.
+        """
         return self.db_engine(db_alias)
 
     def run(self, callable, *args):
+        """
+        Base runner for application object.
+        """
         self.logger.info(f"Starting {self.name}")
         callable(*args)
         self.logger.info(f"Finished {self.name}")
