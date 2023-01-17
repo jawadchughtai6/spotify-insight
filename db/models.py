@@ -2,14 +2,13 @@ import datetime
 from peewee import *
 
 from application import Application
-from db.utils import db
 
 app = Application("Compute Insight")
 
 
 class BaseModel(Model):
     class Meta:
-        database = db
+        database = app.db_config()
 
 
 class User(BaseModel):
@@ -18,7 +17,7 @@ class User(BaseModel):
     client_secret = CharField()
 
     class Meta:
-        database = db
+        database = app.db_config()
 
 
 class Recommendation(BaseModel):
@@ -30,6 +29,6 @@ class Recommendation(BaseModel):
     is_published = BooleanField(default=True)
 
     class Meta:
-        database = db
+        database = app.db_config()
 
 
