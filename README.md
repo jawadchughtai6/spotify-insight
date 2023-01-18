@@ -1,13 +1,15 @@
 # Spotify Insight
+This application communicates with the Spotify Web API to fetch track recommendations against the provided user.
 
 ## Tech Stack
+- Python 3.10
 - [Starlette](https://www.starlette.io/)
 - [Peewee](https://docs.peewee-orm.com/en/latest/)
 - [Uvicorn](https://www.uvicorn.org/) 
 - PostgreSQL
 - Docker
 
-## Directory structure
+## Directory Structure
 ```
 spotify-insight
 └───db  # Database related code goes here 
@@ -39,14 +41,24 @@ spotify-insight
 - You have created a Spotify app following the [app settings guide](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/).
 
 ### Update .env.development
-Using the credentials obtained from the Spotify app, update the following in .env.development
-- `Update CLIENT_ID`
-- `Update CLIENT_SECRET`
-- `Update USERNAME`
-  
-The username can be any alias name against the above credentials. Add them as per wish.
+Using the credentials obtained from the Spotify app, and the desired seeds, update the following in .env.development
+- `CLIENT_ID`
+- `CLIENT_SECRET`
+- `USERNAME`
 
-### Runing the containers
+The `USERNAME` can be any alias name against the above credentials. Add them as per wish.
+
+Recommendations are generated based on the available information for a given seed entity and matched against similar 
+artists and tracks. If there is sufficient information about the provided seeds, a list of tracks will be returned. 
+Please note that a default set of values have been set in the environment so updating the following is optional. 
+For more information, use [this](https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recommendations) 
+as a guide.
+- `SEED_ARTIST`
+- `SEED_GENRES`
+- `SEED_TRACKS`
+
+
+### Running the containers
 - `docker-compose -f docker-compose.dev.yml up --build`
 
 ### Initial database dump
