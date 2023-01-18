@@ -7,6 +7,30 @@
 - PostgreSQL
 - Docker
 
+## Directory structure
+```
+spotify-insight
+└───db  # Database related code goes here 
+│   │   manager.py
+│   │   models.py
+│   
+└───web # Web API's on Starlette go here    
+│   │   Dockerfile.dev
+│   │   web.py
+│   
+│   application.py    # App configurations exist here 
+│   spotify_client.py # Communicates with the Spotify Web API  
+│   docker-compose.dev.yml   
+│   Dockerfile.dev   
+│   .env.development   
+│   Pipfile  
+│   Pipfile.lock   
+│   cron.sh   
+│   spotify.cronjob   
+│   README.md   
+
+```
+
 ## Setting up local environment
 
 ### Pre-requisites
@@ -36,6 +60,10 @@ You should now have your database populated.
 The following API returns recommendations for the given user on a given date:
 
 `http://0.0.0.0:8000/user-recommendations/{username}?date={yyyy-mm-dd}`
+
+## Installing a new package
+- `docker-compose -f docker-compose.dev.yml exec app bash`
+- `pipenv install {Package Name}`
 
 ## Approach
 Recommendations of the given user are fetched after using 
