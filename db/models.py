@@ -3,18 +3,12 @@ from peewee import *
 
 from application import Application
 
-app = Application('Compute Insight')
-
-db = PostgresqlDatabase(app.env('DB'),
-                        user=app.env('DB_USER'),
-                        password=app.env('DB_PASSWORD'),
-                        host=app.env('DB_HOST'),
-                        port=app.env('DB_PORT'))
+app = Application("Compute Insight")
 
 
 class BaseModel(Model):
     class Meta:
-        database = db
+        database = app.db_config()
 
 
 class User(BaseModel):
@@ -23,11 +17,11 @@ class User(BaseModel):
     client_secret = CharField()
 
     class Meta:
-        database = db
+        database = app.db_config()
 
 
 class Recommendation(BaseModel):
-    user = ForeignKeyField(User, backref='recommendations')
+    user = ForeignKeyField(User, backref="recommendations")
     track_id = CharField()
     track_title = CharField()
     track_link = CharField()
@@ -35,6 +29,6 @@ class Recommendation(BaseModel):
     is_published = BooleanField(default=True)
 
     class Meta:
-        database = db
+        database = app.db_config()
 
 
